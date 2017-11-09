@@ -16,6 +16,8 @@ const coroutine = generator => {
   const iterator = generator();
   // Lazily generates the sequential promise chain from the iterator elements.
   const continuation = result => {
+    // Assumes each element is a promise. The nuance here and entire point of
+    // using generators is that this promise chain is lazily computed.
     !result.done && result.value.then && result.value.then(
       res => continuation(iterator.next(res)),
       err => continuation(iterator.throw(err))

@@ -32,6 +32,9 @@ const coroutine = generator => {
 function Schedule(...schedule) {
   coroutine(function * () {
     try {
+      // Cannot use array.protoype.map / forEach. Yield statements within these
+      // lexical closures are syntactic errors. Yield statements are only valid
+      // within generator functions.
       for(let i = 0; i < schedule.length; i++) {
     	const step = schedule[i];
         const promises = step.map(future => future.run());
